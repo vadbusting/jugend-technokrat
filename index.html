@@ -44,6 +44,14 @@
             flex-direction: column;
         }
 
+        /* Responsive behavior for mobile orientation */
+        @media (max-width: 768px) {
+            body {
+                overflow-y: auto;
+                height: auto;
+            }
+        }
+
         /* 3D WebGL Canvas Background */
         #webgl-bg {
             position: fixed;
@@ -65,6 +73,13 @@
             height: 100vh;
             width: 100%;
             justify-content: space-between;
+        }
+
+        @media (max-width: 768px) {
+            .page-overlay {
+                height: auto;
+                min-height: 100vh;
+            }
         }
 
         /* Fixed Minimal Header */
@@ -105,6 +120,13 @@
             overflow: hidden;
         }
 
+        @media (max-width: 768px) {
+            main {
+                overflow: visible;
+                height: auto;
+            }
+        }
+
         .horizontal-gallery {
             display: flex;
             overflow-x: auto;
@@ -121,6 +143,16 @@
             display: none; /* Safari/Chrome */
         }
 
+        @media (max-width: 768px) {
+            .horizontal-gallery {
+                flex-direction: column;
+                height: auto;
+                overflow: visible;
+                padding: 2rem 1.5rem;
+                gap: 3.5rem;
+            }
+        }
+
         .product-card {
             flex: 0 0 clamp(280px, 28vw, 420px);
             scroll-snap-align: start;
@@ -131,6 +163,13 @@
             transition: background-color 0.4s;
             cursor: pointer;
             height: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .product-card {
+                flex: 0 0 auto;
+                width: 100%;
+            }
         }
 
         .product-card:hover {
@@ -144,6 +183,13 @@
             height: 78%;
             overflow: hidden;
             background: #080808;
+        }
+
+        @media (max-width: 768px) {
+            .image-wrapper {
+                height: auto;
+                padding-top: 110%; /* Responsive aspect ratio on vertical screen */
+            }
         }
 
         .image-wrapper img {
@@ -238,6 +284,12 @@
             mix-blend-mode: difference;
         }
 
+        @media (max-width: 768px) {
+            .bottom-section {
+                padding: 2rem 1.5rem;
+            }
+        }
+
         .disclaimer-text {
             font-size: 0.75rem;
             line-height: 1.5;
@@ -245,15 +297,17 @@
             max-width: 900px;
         }
 
+        /* Blend in links - no high contrast white/bold */
         .disclaimer-text a {
-            color: var(--text-color);
+            color: var(--text-secondary);
             text-decoration: underline;
+            text-decoration-color: rgba(255, 255, 255, 0.15);
             text-underline-offset: 3px;
             transition: color 0.3s;
         }
 
         .disclaimer-text a:hover {
-            color: var(--text-secondary);
+            color: var(--text-color);
         }
 
         footer {
@@ -361,16 +415,6 @@
         /* Responsive Layout fixes */
         @media (max-width: 768px) {
             header {
-                padding: 1.5rem;
-            }
-            .horizontal-gallery {
-                padding: 0 1.5rem;
-                height: 50vh;
-            }
-            .product-card {
-                flex: 0 0 280px;
-            }
-            .bottom-section {
                 padding: 1.5rem;
             }
             footer {
@@ -570,7 +614,7 @@
                 
                 card.innerHTML = `
                     <div class="image-wrapper" onclick="window.open('${p.zazzle_url}', '_blank')">
-                        <img src="${p.image_url}" alt="${titleText}">
+                        <img src="${p.image_url}" alt="${titleText}" onerror="this.onerror=null; this.src='${p.design_url}';">
                     </div>
                     <div class="product-info" onclick="window.open('${p.zazzle_url}', '_blank')">
                         <h3 class="product-title">${titleText}</h3>
