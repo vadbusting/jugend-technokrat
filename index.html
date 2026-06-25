@@ -98,12 +98,20 @@
         }
 
         .logo-area .subtitle {
-            font-size: clamp(0.75rem, 1vw, 1rem);
+            font-size: clamp(0.7rem, 0.9vw, 1rem);
             font-weight: 300;
             letter-spacing: 0.02em;
             line-height: 1.5;
             color: var(--text-secondary);
-            max-width: 700px;
+            max-width: 95vw;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .logo-area .subtitle {
+                white-space: normal;
+                max-width: 90vw;
+            }
         }
 
         .lang-selector {
@@ -385,7 +393,7 @@
         <header>
             <div class="logo-area">
                 <h1 id="brand-title">JUGEND TECHNOKRAT</h1>
-                <div class="subtitle" id="site-subtitle">Hands still young - heads still unspoiled. Youth rules the world and brings adolescence to the front.</div>
+                <div class="subtitle" id="site-subtitle">Hände noch jung, Köpfe noch unverdorben. Jugend lenkt die Welt und bringt die Adoleszenz auf den Plan.</div>
             </div>
         </header>
 
@@ -513,7 +521,6 @@
 
         const TRANSLATIONS = {
             en: {
-                subtitle: "Hands still young - heads still unspoiled. Youth rules the world and brings adolescence to the front.",
                 loading: "Loading JUGEND Collection...",
                 noDesigns: "No designs released yet.",
                 consent: `By entering and using this site, you agree to our <a href="javascript:void(0)" onclick="openModal('privacy')">Privacy Policy</a>. Please refer to our <a href="javascript:void(0)" onclick="openModal('privacy')">Privacy Policy</a> for details.`,
@@ -524,7 +531,6 @@
                 termsBody: `All visual products shown on JUGEND TECHNOKRAT represent automatically mapped design files on Zazzle templates. When you click to buy, you are redirected to Zazzle's custom editor. All sales transactions, customer refunds, and standard guarantees are processed under Zazzle's strict Terms of Service.`
             },
             jp: {
-                subtitle: "手はまだ若く、頭脳はまだ汚されていない。若さが世界を支配し、思春期を呼び起こす。",
                 loading: "コレクションを読み込み中...",
                 noDesigns: "まだデザインが公開されていません。",
                 consent: `お客様は、本サイトを利用することにより個人情報保護方針に同意したことになります。<a href="javascript:void(0)" onclick="openModal('privacy')">プライバシーポリシー</a>を参照してください。`,
@@ -544,7 +550,6 @@
             document.getElementById('lang-jp').classList.toggle('active', lang === 'jp');
             
             // Set static texts
-            document.getElementById('site-subtitle').textContent = TRANSLATIONS[lang].subtitle;
             document.getElementById('consent-text').innerHTML = TRANSLATIONS[lang].consent;
             document.getElementById('modal-privacy-title').textContent = TRANSLATIONS[lang].privacyTitle;
             document.getElementById('modal-privacy-body').innerHTML = TRANSLATIONS[lang].privacyBody;
