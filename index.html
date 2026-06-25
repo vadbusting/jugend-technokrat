@@ -12,6 +12,9 @@
     <!-- Three.js & GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <!-- Local database script (loads const JUGEND_PRODUCTS to bypass local CORS block) -->
+    <script src="products.js"></script>
 
     <style>
         :root {
@@ -228,95 +231,31 @@
             font-size: 1.5rem;
         }
 
-        /* Newsletter & Privacy Form Section (Brutalist Minimalist) */
-        .newsletter-section {
+        /* Consent / Disclaimer Text Box */
+        .disclaimer-section {
             border-top: 1px solid var(--border-color);
-            padding: 6vw 0;
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 2rem;
+            padding: 4vw 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
             mix-blend-mode: difference;
         }
 
-        .newsletter-info {
-            grid-column: span 5;
-        }
-
-        .newsletter-info h2 {
-            font-family: var(--font-editorial);
-            font-size: 2.2rem;
-            font-weight: 300;
-            letter-spacing: -0.02em;
-            margin-bottom: 1rem;
-        }
-
-        .newsletter-info p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-
-        .newsletter-form-container {
-            grid-column: span 7;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .newsletter-form {
-            display: flex;
-            border-bottom: 1px solid var(--text-color);
-            padding-bottom: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .newsletter-form input[type="email"] {
-            background: transparent;
-            border: none;
-            outline: none;
-            color: var(--text-color);
-            font-family: var(--font-sans);
-            font-size: 1.1rem;
-            flex-grow: 1;
-            padding: 0.5rem 0;
-            letter-spacing: 0.05em;
-        }
-
-        .newsletter-form input[type="email"]::placeholder {
-            color: rgba(255, 255, 255, 0.25);
-        }
-
-        .newsletter-form button {
-            background: transparent;
-            border: none;
-            color: var(--text-color);
-            cursor: pointer;
-            text-transform: uppercase;
+        .disclaimer-text {
             font-size: 0.8rem;
-            letter-spacing: 0.15em;
-            font-weight: 600;
-            padding: 0 1rem;
-            transition: opacity 0.3s;
-        }
-
-        .newsletter-form button:hover {
-            opacity: 0.7;
-        }
-
-        .newsletter-disclaimer {
-            font-size: 0.75rem;
-            line-height: 1.5;
+            line-height: 1.6;
             color: var(--text-secondary);
+            max-width: 800px;
         }
 
-        .newsletter-disclaimer a {
+        .disclaimer-text a {
             color: var(--text-color);
             text-decoration: underline;
             text-underline-offset: 3px;
             transition: color 0.3s;
         }
 
-        .newsletter-disclaimer a:hover {
+        .disclaimer-text a:hover {
             color: var(--text-secondary);
         }
 
@@ -373,11 +312,6 @@
                 grid-column: span 6;
                 margin-top: 0;
             }
-            .newsletter-section {
-                display: flex;
-                flex-direction: column;
-                gap: 2.5rem;
-            }
         }
 
         @media (max-width: 768px) {
@@ -407,7 +341,7 @@
         <header>
             <div class="logo-area">
                 <h1 id="brand-title">JUGEND<br>TECHNOKRAT</h1>
-                <div class="subtitle">Haende noch jung - Koepfe noch unverdorben. Jugend lenkt die Welt und bringt die Adoleszenz auf den Plan.</div>
+                <div class="subtitle">Haende noch jung - Koepfe noch unverdorben. Jugend lenkt die Welt und brings die Adoleszenz auf den Plan.</div>
             </div>
         </header>
 
@@ -418,21 +352,12 @@
             </div>
         </main>
 
-        <!-- Newsletter & Legal Consent Section -->
-        <section class="newsletter-section">
-            <div class="newsletter-info">
-                <h2>NEWSLETTER</h2>
-                <p>Register to receive notifications about new drops and exclusive editorial content.</p>
-            </div>
-            <div class="newsletter-form-container">
-                <div class="newsletter-form">
-                    <input type="email" placeholder="ENTER YOUR EMAIL ADDRESS" required>
-                    <button type="button">Subscribe</button>
-                </div>
-                <div class="newsletter-disclaimer">
-                    By subscribing, you agree to our <a href="#privacy">Privacy Policy</a>. Please refer to our <a href="#privacy">Privacy Policy</a>.
-                </div>
-            </div>
+        <!-- Legal Consent Disclaimer Section -->
+        <section class="disclaimer-section">
+            <p class="disclaimer-text">
+                By entering and using this site, you agree to our <a href="#privacy">Privacy Policy</a>. Please refer to our <a href="#privacy">Privacy Policy</a> for details.<br>
+                お客様は、本サイトを利用することにより個人情報保護方針に同意したことになります。<a href="#privacy">プライバシーポリシー</a>を参照してください。
+            </p>
         </section>
 
         <!-- Footer -->
@@ -528,54 +453,48 @@
 
     <!-- Product Loader & GSAP Reveal Script -->
     <script>
-        async function loadProducts() {
+        function loadProducts() {
             const grid = document.getElementById('product-grid');
-            try {
-                const response = await fetch('products.json');
-                if (!response.ok) throw new Error('Failed to load products.json');
-                const products = await response.json();
-                
-                if (products.length === 0) {
-                    grid.innerHTML = '<div class="loading-msg">No designs released yet.</div>';
-                    return;
-                }
-
-                grid.innerHTML = '';
-                products.forEach(p => {
-                    const card = document.createElement('div');
-                    card.className = 'product-card';
-                    card.innerHTML = `
-                        <div class="image-wrapper">
-                            <img src="${p.image_url}" alt="${p.title}">
-                        </div>
-                        <div class="product-info">
-                            <div>
-                                <h3 class="product-title">${p.title}</h3>
-                                <p class="product-desc">${p.description || ''}</p>
-                            </div>
-                            <span class="product-price">${p.price || ''}</span>
-                        </div>
-                        <a href="${p.zazzle_url}" target="_blank" class="shop-btn">
-                            Buy on Zazzle
-                            <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </a>
-                    `;
-                    grid.appendChild(card);
-                });
-
-                // GSAP Grid Items Entrance Animation
-                gsap.from(".product-card", {
-                    opacity: 0,
-                    y: 50,
-                    duration: 1.2,
-                    stagger: 0.15,
-                    ease: "power3.out"
-                });
-
-            } catch (error) {
-                console.error(error);
-                grid.innerHTML = '<div class="loading-msg">Failed to load JUGEND Collection.</div>';
+            
+            // Check if JUGEND_PRODUCTS is defined globally (from products.js)
+            const products = (typeof JUGEND_PRODUCTS !== 'undefined') ? JUGEND_PRODUCTS : [];
+            
+            if (products.length === 0) {
+                grid.innerHTML = '<div class="loading-msg">No designs released yet.</div>';
+                return;
             }
+
+            grid.innerHTML = '';
+            products.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="image-wrapper">
+                        <img src="${p.image_url}" alt="${p.title}">
+                    </div>
+                    <div class="product-info">
+                        <div>
+                            <h3 class="product-title">${p.title}</h3>
+                            <p class="product-desc">${p.description || ''}</p>
+                        </div>
+                        <span class="product-price">${p.price || ''}</span>
+                    </div>
+                    <a href="${p.zazzle_url}" target="_blank" class="shop-btn">
+                        Buy on Zazzle
+                        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                `;
+                grid.appendChild(card);
+            });
+
+            // GSAP Grid Items Entrance Animation
+            gsap.from(".product-card", {
+                opacity: 0,
+                y: 50,
+                duration: 1.2,
+                stagger: 0.15,
+                ease: "power3.out"
+            });
         }
 
         // GSAP Header Reveal Animation
