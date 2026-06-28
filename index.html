@@ -65,22 +65,31 @@
     .lang-toggle {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 0;
     }
     .lang-btn {
       background: none;
       border: none;
       font-size: 10px;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--muted);
       cursor: pointer;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      transition: color 0.2s;
+      transition: color 0.2s, font-weight 0.2s;
       padding: 0;
+      font-weight: 300;
     }
-    .lang-btn.active { color: var(--fg); }
-    .lang-sep { color: var(--border); font-size: 10px; }
+    .lang-btn.active {
+      color: var(--fg);
+      font-weight: 700;
+    }
+    .lang-sep {
+      color: var(--muted);
+      font-size: 10px;
+      margin: 0 16px;
+      font-weight: 300;
+    }
 
     /* ── HERO ── */
     #hero {
@@ -93,31 +102,30 @@
       font-family: 'Playfair Display', serif;
       font-size: clamp(2.5rem, 6vw, 6.5rem);
       line-height: 1.0;
-      letter-spacing: -0.02em;
+      letter-spacing: 0.02em;
       color: var(--fg);
       text-transform: uppercase;
       margin-bottom: 24px;
+      font-weight: 400;
     }
 
     .hero-sub {
-      font-size: 11px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: none;
       color: var(--muted);
       line-height: 1.8;
+      font-weight: 300;
     }
 
     .hero-rule {
-      width: 40px;
-      height: 1px;
-      background: var(--border);
-      margin: 40px auto 0;
+      display: none;
     }
 
     /* ── FILTER BAR ── */
     #filter-bar {
       position: sticky;
-      top: 61px;
+      top: 0;
       z-index: 90;
       background: var(--bg);
       border-bottom: 1px solid var(--border);
@@ -262,45 +270,55 @@
 
     /* ── CONSENT ── */
     .consent-text {
-      padding: 24px 28px;
+      padding: 0 28px;
       font-size: 10px;
-      letter-spacing: 0.10em;
+      letter-spacing: 0.08em;
       color: var(--muted);
       text-align: center;
       line-height: 1.8;
-      border-bottom: 1px solid var(--border);
+      max-width: 760px;
+      margin: 0 auto;
+      font-weight: 300;
     }
     .consent-text button {
-      color: var(--accent);
+      color: var(--muted);
       background: none;
       border: none;
       font-size: 10px;
-      letter-spacing: 0.10em;
+      letter-spacing: 0.08em;
       font-family: 'Plus Jakarta Sans', sans-serif;
       cursor: pointer;
       text-decoration: underline;
       padding: 0;
+      font-weight: 300;
+      transition: color 0.2s;
+    }
+    .consent-text button:hover {
+      color: var(--fg);
     }
 
     /* ── FOOTER ── */
     footer {
       border-top: 1px solid var(--border);
-      padding: 28px;
+      padding: 60px 28px 48px;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
+      gap: 28px;
       margin-top: 1px;
     }
 
     .footer-links {
       display: flex;
-      gap: 24px;
       align-items: center;
+      justify-content: center;
+      gap: 16px;
     }
 
     .footer-links button {
       font-size: 10px;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--muted);
       text-decoration: none;
@@ -309,19 +327,26 @@
       cursor: pointer;
       font-family: 'Plus Jakarta Sans', sans-serif;
       transition: color 0.2s;
+      font-weight: 300;
     }
     .footer-links button:hover { color: var(--fg); }
 
+    .footer-link-sep {
+      color: var(--muted);
+      font-size: 10px;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
     .footer-copy {
       font-size: 10px;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.16em;
       color: var(--muted);
+      font-weight: 300;
     }
 
     @media (max-width: 600px) {
-      header { padding: 16px 18px; }
-      .brand { font-size: 12px; }
-      footer { flex-direction: column; gap: 16px; text-align: center; }
+      footer { padding: 36px 18px; gap: 16px; }
       .filter-inner { padding: 0 18px; }
       .count-bar { padding: 18px 18px 10px; }
     }
@@ -382,27 +407,15 @@
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header>
-    <a href="#" class="brand">JUGEND TECHNOKRAT</a>
-    <div class="lang-toggle">
-      <button id="btn-en" class="lang-btn active" onclick="setLang('en')">EN</button>
-      <span class="lang-sep">/</span>
-      <button id="btn-jp" class="lang-btn" onclick="setLang('jp')">JP</button>
-    </div>
-  </header>
-
-  <!-- HERO -->
+  <!-- HERO / HEADER -->
   <section id="hero">
-    <h1 class="hero-title">JUGEND<br>TECHNOKRAT</h1>
-    <p class="hero-sub">Hände noch jung, Köpfe noch unverdorben.<br>Jugend lenkt die Welt und bringt die Adoleszenz auf den Plan.</p>
-    <div class="hero-rule"></div>
+    <h1 class="hero-title">JUGEND TECHNOKRAT</h1>
+    <p class="hero-sub">Hände noch jung, Köpfe noch unverdorben. Jugend lenkt die Welt und bringt die Adoleszenz auf den Plan.</p>
   </section>
 
   <!-- FILTER BAR -->
   <div id="filter-bar">
     <div class="filter-inner">
-      <button class="filter-btn active" onclick="filter('all')">ALL</button>
       <button class="filter-btn" onclick="filter('A')">A</button>
       <button class="filter-btn" onclick="filter('B')">B</button>
       <button class="filter-btn" onclick="filter('C')">C</button>
@@ -415,6 +428,7 @@
       <button class="filter-btn" onclick="filter('J')">J</button>
       <button class="filter-btn" onclick="filter('K')">K</button>
       <button class="filter-btn" onclick="filter('PROTO')">PROTO</button>
+      <button class="filter-btn active" onclick="filter('all')">ALL</button>
     </div>
   </div>
 
@@ -426,18 +440,29 @@
     <div class="grid" id="grid"></div>
   </section>
 
-  <!-- CONSENT TEXT -->
-  <div class="consent-text" id="consent-text">
-    By entering and using this site, you agree to our <button onclick="document.getElementById('modal-privacy').showModal()">Privacy Policy</button>. Please refer to our <button onclick="document.getElementById('modal-privacy').showModal()">Privacy Policy</button> for details.
-  </div>
-
   <!-- FOOTER -->
   <footer>
-    <div class="footer-copy">JUGEND TECHNOKRAT &copy; 2026</div>
-    <div class="footer-links">
-      <button onclick="document.getElementById('modal-privacy').showModal()" id="link-privacy">Privacy Policy</button>
-      <button onclick="document.getElementById('modal-terms').showModal()" id="link-terms">Terms of Use</button>
+    <!-- Consent text on top of footer -->
+    <div class="consent-text" id="consent-text">
+      By entering and using this site, you agree to our <button onclick="document.getElementById('modal-privacy').showModal()">Privacy Policy</button>. Please refer to our <button onclick="document.getElementById('modal-privacy').showModal()">Privacy Policy</button> for details.
     </div>
+    
+    <!-- Privacy and Terms links -->
+    <div class="footer-links">
+      <button onclick="document.getElementById('modal-privacy').showModal()" id="link-privacy">PRIVACY POLICY</button>
+      <span class="footer-link-sep">·</span>
+      <button onclick="document.getElementById('modal-terms').showModal()" id="link-terms">TERMS OF USE</button>
+    </div>
+
+    <!-- Language Toggle between links and copyright -->
+    <div class="lang-toggle">
+      <button id="btn-en" class="lang-btn active" onclick="setLang('en')">EN</button>
+      <span class="lang-sep">/</span>
+      <button id="btn-jp" class="lang-btn" onclick="setLang('jp')">JP</button>
+    </div>
+
+    <!-- Copyright at the very bottom -->
+    <div class="footer-copy">&copy; JUGEND TECHNOKRAT</div>
   </footer>
 
   <!-- PRIVACY MODAL -->
@@ -459,6 +484,10 @@
   </dialog>
 
   <script>
+    /* ── DATA LOAD ── */
+    const JUGEND_PRODUCTS = window.products || [];
+    console.log("件数:", JUGEND_PRODUCTS.length);
+
     /* ── TRANSLATIONS ── */
     const TRANSLATIONS = {
       en: {

@@ -1,0 +1,40 @@
+name: Auto Sync Zazzle Products
+
+on:
+  schedule:
+    # 毎日午前3時 (UTC 18:00) に自動実行
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+    # 手動実行も可能にする
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # リポジトリへの自動プッシュを許可
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    - name: Run update script
+      run: |
+        python update_data.py
+
+    - name: Commit and push changes
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add products.js catalog.csv products_pinterest_catalog.csv
+        # 変更がある場合のみコミット
+        if git diff --staged --quiet; then
+          echo "No changes to commit."
+        else
+          git commit -m "Auto-sync: Add new Zazzle products from RSS feed"
+          git push
+        fi
