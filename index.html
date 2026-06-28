@@ -1,666 +1,598 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JUGEND TECHNOKRAT — Premium Avant-Garde Collection</title>
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
-    
-    <!-- Three.js & GSAP -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    
-    <!-- Local database script (loads const JUGEND_PRODUCTS to bypass local CORS block) -->
-    <script src="products.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JUGEND TECHNOKRAT</title>
+  <meta name="description" content="JUGEND TECHNOKRAT. Shop the collection on Zazzle." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet" />
+  <script src="products.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <style>
-        :root {
-            --bg-color: #030303;
-            --text-color: #ffffff;
-            --text-secondary: #8c8c8c;
-            --accent-color: #ffffff;
-            --border-color: rgba(255, 255, 255, 0.08);
-            --font-editorial: "Playfair Display", Georgia, serif;
-            --font-sans: "Plus Jakarta Sans", sans-serif;
-        }
+    :root {
+      --bg: #0a0a0a;
+      --fg: #f0ece4;
+      --muted: #555;
+      --border: #1e1e1e;
+      --accent: #c8b89a;
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    html { scroll-behavior: smooth; }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: var(--font-sans);
-            min-height: 100vh;
-            overflow-y: auto;
-            overflow-x: hidden;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            scroll-behavior: smooth;
-        }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      -webkit-font-smoothing: antialiased;
+    }
 
-        /* 3D WebGL Canvas Background */
-        #webgl-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.3;
-        }
+    /* ── HEADER ── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(8px);
+    }
 
-        /* Container Overlay */
-        .page-overlay {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            min-height: 100vh;
-        }
+    .brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 14px;
+      letter-spacing: 0.15em;
+      color: var(--fg);
+      text-decoration: none;
+      text-transform: uppercase;
+    }
 
-        /* Centered Editorial Header */
-        header {
-            width: 100%;
-            padding: 6rem 2rem 4rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            mix-blend-mode: difference;
-        }
+    nav {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
 
-        .logo-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-        }
+    /* ── LANG TOGGLE ── */
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .lang-btn {
+      background: none;
+      border: none;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: color 0.2s;
+      padding: 0;
+    }
+    .lang-btn.active { color: var(--fg); }
+    .lang-sep { color: var(--border); font-size: 10px; }
 
-        .logo-area h1 {
-            font-family: var(--font-editorial);
-            font-size: clamp(2.2rem, 5vw, 5.5rem);
-            font-weight: 300;
-            letter-spacing: -0.02em;
-            line-height: 1.0;
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-        }
+    /* ── HERO ── */
+    #hero {
+      padding-top: 150px;
+      padding-bottom: 80px;
+      text-align: center;
+    }
 
-        .logo-area .subtitle {
-            font-size: clamp(0.7rem, 0.9vw, 1rem);
-            font-weight: 300;
-            letter-spacing: 0.02em;
-            line-height: 1.5;
-            color: var(--text-secondary);
-            max-width: 95vw;
-            white-space: nowrap;
-        }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 6vw, 6.5rem);
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      color: var(--fg);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
 
-        @media (max-width: 768px) {
-            .logo-area .subtitle {
-                white-space: normal;
-                max-width: 90vw;
-            }
-        }
+    .hero-sub {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      line-height: 1.8;
+    }
 
-        .lang-selector {
-            display: flex;
-            gap: 0.5rem;
-            font-weight: 600;
-            margin-top: 2rem;
-        }
+    .hero-rule {
+      width: 40px;
+      height: 1px;
+      background: var(--border);
+      margin: 40px auto 0;
+    }
 
-        /* Centered Vertical Scroll Layout */
-        main {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            padding: 2rem 2rem 8rem;
-            gap: 12vh; /* Large spacing for clean editorial look */
-            perspective: 1200px;
-        }
+    /* ── FILTER BAR ── */
+    #filter-bar {
+      position: sticky;
+      top: 61px;
+      z-index: 90;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    #filter-bar::-webkit-scrollbar { display: none; }
 
-        .showcase-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8vh;
-            width: 100%;
-            max-width: 600px;
-        }
+    .filter-inner {
+      display: flex;
+      gap: 0;
+      padding: 0 28px;
+      white-space: nowrap;
+      justify-content: center;
+    }
 
-        /* Interactive 3D Card with Tilt */
-        .product-card {
-            width: 100%;
-            max-width: 440px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.01);
-            cursor: pointer;
-            transform-style: preserve-3d;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            transition: background-color 0.4s;
-            opacity: 0; /* Animated by GSAP */
-            transform: translateY(50px);
-        }
+    .filter-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 16px 15px;
+      cursor: pointer;
+      transition: color 0.2s;
+      border-bottom: 1px solid transparent;
+    }
+    .filter-btn:hover { color: var(--fg); }
+    .filter-btn.active {
+      color: var(--fg);
+      border-bottom-color: var(--fg);
+    }
 
-        .product-card:hover {
-            background: rgba(255, 255, 255, 0.02);
-        }
+    /* ── GRID ── */
+    #products {
+      padding: 0;
+    }
 
-        /* Full Bleed Image - No Borders or Margins */
-        .image-wrapper {
-            position: relative;
-            width: 100%;
-            padding-top: 120%; /* 5:6 Portrait ratio */
-            overflow: hidden;
-            background: #080808;
-            transform: translateZ(10px);
-        }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+    }
 
-        .image-wrapper img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(10%) contrast(105%);
-            pointer-events: none;
-            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 540px) {
+      .grid { grid-template-columns: 1fr; }
+    }
 
-        .product-card:hover .image-wrapper img {
-            transform: scale(1.03);
-        }
+    /* ── PRODUCT CARD ── */
+    .card {
+      position: relative;
+      background: var(--bg);
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
 
-        /* Centered stacked product details */
-        .product-details {
-            padding: 2rem 1.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            width: 100%;
-            text-align: center;
-        }
+    .card-img-wrap {
+      position: relative;
+      overflow: hidden;
+      flex: 1;
+      min-height: 0;
+      aspect-ratio: 1/1;
+    }
 
-        .product-title {
-            font-family: var(--font-sans);
-            font-size: 1.15rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-color);
-        }
+    .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  opacity 0.4s ease;
+      opacity: 0;
+      background: #111;
+    }
+    .card-img.loaded { opacity: 1; }
 
-        .product-price {
-            font-size: 0.9rem;
-            letter-spacing: 0.08em;
-            font-weight: 400;
-            color: var(--text-secondary);
-        }
+    .card:hover .card-img-wrap .card-img { transform: scale(1.04); }
 
-        /* Buy Overlay Button */
-        .shop-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            text-transform: uppercase;
-            font-size: 0.7rem;
-            letter-spacing: 0.15em;
-            text-decoration: none;
-            color: var(--text-color);
-            font-weight: 600;
-            margin-top: 0.75rem;
-            border-bottom: 1px solid var(--text-color);
-            padding-bottom: 0.25rem;
-            transition: border-color 0.3s, color 0.3s;
-        }
+    .card-img-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0);
+      transition: background 0.35s ease;
+    }
+    .card:hover .card-img-wrap::after { background: rgba(0,0,0,0.08); }
 
-        .shop-btn:hover {
-            color: var(--text-secondary);
-            border-color: var(--text-secondary);
-        }
+    .card-info {
+      padding: 16px 18px;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
 
-        .shop-btn svg {
-            width: 12px;
-            height: 12px;
-            fill: currentColor;
-        }
+    .card-title {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--fg);
+      line-height: 1.4;
+    }
 
-        .loading-msg {
-            font-family: var(--font-editorial);
-            font-style: italic;
-            color: var(--text-secondary);
-            font-size: 1.5rem;
-            padding: 8rem 0;
-        }
+    .card-price {
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-top: 3px;
+    }
 
-        /* Legal Section & Footer */
-        .bottom-section {
-            padding: 4rem 2rem 3rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            mix-blend-mode: difference;
-            align-items: center;
-            text-align: center;
-            border-top: 1px solid var(--border-color);
-        }
+    .card-buy {
+      display: inline-block;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      margin-top: 12px;
+      padding-bottom: 1px;
+      border-bottom: 1px solid var(--accent);
+      transition: opacity 0.2s;
+    }
+    .card-buy:hover { opacity: 0.65; }
 
-        .disclaimer-text {
-            font-size: 0.62rem;
-            line-height: 1.4;
-            color: var(--text-secondary);
-            max-width: 600px;
-            opacity: 0.8;
-        }
+    /* ── COUNT ── */
+    .count-bar {
+      padding: 24px 28px 12px;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
 
-        /* Blend in links - no high contrast white/bold */
-        .disclaimer-text a {
-            color: var(--text-secondary);
-            text-decoration: underline;
-            text-decoration-color: rgba(255, 255, 255, 0.15);
-            text-underline-offset: 2px;
-            transition: color 0.3s;
-        }
+    /* ── CONSENT ── */
+    .consent-text {
+      padding: 24px 28px;
+      font-size: 10px;
+      letter-spacing: 0.10em;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.8;
+      border-bottom: 1px solid var(--border);
+    }
+    .consent-text button {
+      color: var(--accent);
+      background: none;
+      border: none;
+      font-size: 10px;
+      letter-spacing: 0.10em;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+    }
 
-        .disclaimer-text a:hover {
-            color: var(--text-color);
-        }
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1px;
+    }
 
-        footer {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.75rem;
-            color: var(--text-secondary);
-            font-size: 0.65rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            width: 100%;
-            margin-top: 1rem;
-        }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
 
-        .footer-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
+    .footer-links button {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: color 0.2s;
+    }
+    .footer-links button:hover { color: var(--fg); }
 
-        .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
+    .footer-copy {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+    }
 
-        .footer-links a:hover {
-            color: var(--text-color);
-        }
+    @media (max-width: 600px) {
+      header { padding: 16px 18px; }
+      .brand { font-size: 12px; }
+      footer { flex-direction: column; gap: 16px; text-align: center; }
+      .filter-inner { padding: 0 18px; }
+      .count-bar { padding: 18px 18px 10px; }
+    }
 
-        /* Language Toggle style */
-        .lang-btn {
-            cursor: pointer;
-            color: var(--text-secondary);
-            transition: color 0.3s;
-        }
+    /* ── MODAL ── */
+    dialog {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      max-width: 520px;
+      width: 90%;
+      padding: 0;
+      margin: auto;
+      top: 50%; transform: translateY(-50%);
+    }
+    dialog::backdrop { background: rgba(0,0,0,0.75); }
 
-        .lang-btn.active {
-            color: var(--text-color);
-        }
+    .modal-inner {
+      padding: 40px;
+      text-align: center;
+    }
 
-        /* Sleek HTML5 Modal Dialog Style */
-        dialog {
-            background: #0a0a0a;
-            color: #fff;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            padding: 3rem;
-            max-width: 600px;
-            width: 90%;
-            margin: auto;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-            z-index: 100;
-        }
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      color: var(--fg);
+    }
 
-        dialog::backdrop {
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(5px);
-        }
+    .modal-body {
+      font-size: 11px;
+      line-height: 1.9;
+      color: var(--muted);
+      text-align: center;
+    }
 
-        dialog h2 {
-            font-family: var(--font-editorial);
-            font-size: 2rem;
-            font-weight: 300;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 0.5rem;
-        }
+    .modal-close {
+      display: inline-block;
+      margin-top: 28px;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fg);
+      background: none;
+      border: 1px solid var(--border);
+      padding: 10px 24px;
+      cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: border-color 0.2s;
+    }
+    .modal-close:hover { border-color: var(--fg); }
 
-        dialog .content {
-            font-size: 0.85rem;
-            line-height: 1.7;
-            color: var(--text-secondary);
-            max-height: 50vh;
-            overflow-y: auto;
-            margin-bottom: 2rem;
-        }
-
-        dialog .close-btn {
-            background: #fff;
-            color: #000;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            cursor: pointer;
-            width: 100%;
-            transition: opacity 0.3s;
-        }
-
-        dialog .close-btn:hover {
-            opacity: 0.85;
-        }
-    </style>
+    /* ── HIDDEN ── */
+    .hidden { display: none !important; }
+  </style>
 </head>
 <body>
 
-    <!-- WebGL Canvas for 3D Background -->
-    <canvas id="webgl-bg"></canvas>
-
-    <div class="page-overlay">
-        <!-- Centered Minimal Header -->
-        <header>
-            <div class="logo-area">
-                <h1 id="brand-title">JUGEND TECHNOKRAT</h1>
-                <div class="subtitle" id="site-subtitle">Hände noch jung, Köpfe noch unverdorben. Jugend lenkt die Welt und bringt die Adoleszenz auf den Plan.</div>
-            </div>
-        </header>
-
-        <!-- Centered Vertical Scroll Showcase -->
-        <main>
-            <div class="showcase-container" id="product-showcase">
-                <div class="loading-msg" id="loading-msg">Loading JUGEND Collection...</div>
-            </div>
-        </main>
-
-        <!-- Bottom Disclaimer and Links -->
-        <div class="bottom-section">
-            <section class="disclaimer-section">
-                <p class="disclaimer-text" id="consent-text">
-                    By entering and using this site, you agree to our <a href="javascript:void(0)" onclick="openModal('privacy')">Privacy Policy</a>. Please refer to our <a href="javascript:void(0)" onclick="openModal('privacy')">Privacy Policy</a> for details.
-                </p>
-            </section>
-
-            <!-- Footer -->
-            <footer>
-                <div class="footer-links">
-                    <a href="javascript:void(0)" onclick="openModal('privacy')">PRIVACY POLICY</a>
-                    <a href="javascript:void(0)" onclick="openModal('terms')">TERMS OF USE</a>
-                </div>
-                <div class="lang-selector">
-                    <span class="lang-btn active" id="lang-en" onclick="setLang('en')">EN</span>
-                    <span style="color: var(--text-secondary)">/</span>
-                    <span class="lang-btn" id="lang-jp" onclick="setLang('jp')">JP</span>
-                </div>
-                <div class="foot-right">© JUGEND TECHNOKRAT</div>
-            </footer>
-        </div>
+  <!-- HEADER -->
+  <header>
+    <a href="#" class="brand">JUGEND TECHNOKRAT</a>
+    <div class="lang-toggle">
+      <button id="btn-en" class="lang-btn active" onclick="setLang('en')">EN</button>
+      <span class="lang-sep">/</span>
+      <button id="btn-jp" class="lang-btn" onclick="setLang('jp')">JP</button>
     </div>
+  </header>
 
-    <!-- Modals -->
-    <dialog id="privacy-dialog">
-        <h2 id="modal-privacy-title">Privacy Policy</h2>
-        <div class="content" id="modal-privacy-body">
-            This Privacy Policy outlines how JUGEND TECHNOKRAT protects your privacy. We do not collect personal identifiers or run newsletters. All orders and processing are securely handled offsite by Zazzle.
-        </div>
-        <button class="close-btn" onclick="closeModal('privacy')">Close</button>
-    </dialog>
+  <!-- HERO -->
+  <section id="hero">
+    <h1 class="hero-title">JUGEND<br>TECHNOKRAT</h1>
+    <p class="hero-sub">Hände noch jung, Köpfe noch unverdorben.<br>Jugend lenkt die Welt und bringt die Adoleszenz auf den Plan.</p>
+    <div class="hero-rule"></div>
+  </section>
 
-    <dialog id="terms-dialog">
-        <h2 id="modal-terms-title">Terms of Use</h2>
-        <div class="content" id="modal-terms-body">
-            By accessing JUGEND TECHNOKRAT, you agree to our Terms of Use. We display design mockups linked directly to our template products on Zazzle. All transactions, shipping, and product returns are governed strictly under Zazzle's terms of service.
-        </div>
-        <button class="close-btn" onclick="closeModal('terms')">Close</button>
-    </dialog>
+  <!-- FILTER BAR -->
+  <div id="filter-bar">
+    <div class="filter-inner">
+      <button class="filter-btn active" onclick="filter('all')">ALL</button>
+      <button class="filter-btn" onclick="filter('A')">A</button>
+      <button class="filter-btn" onclick="filter('B')">B</button>
+      <button class="filter-btn" onclick="filter('C')">C</button>
+      <button class="filter-btn" onclick="filter('D')">D</button>
+      <button class="filter-btn" onclick="filter('E')">E</button>
+      <button class="filter-btn" onclick="filter('F')">F</button>
+      <button class="filter-btn" onclick="filter('G')">G</button>
+      <button class="filter-btn" onclick="filter('H')">H</button>
+      <button class="filter-btn" onclick="filter('I')">I</button>
+      <button class="filter-btn" onclick="filter('J')">J</button>
+      <button class="filter-btn" onclick="filter('K')">K</button>
+      <button class="filter-btn" onclick="filter('PROTO')">PROTO</button>
+    </div>
+  </div>
 
-    <!-- WebGL 3D Background Script -->
-    <script>
-        const canvas = document.getElementById('webgl-bg');
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.setSize(window.innerWidth, window.innerHeight);
+  <!-- COUNT -->
+  <div class="count-bar" id="count-bar">— items</div>
 
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.z = 15;
+  <!-- GRID -->
+  <section id="products">
+    <div class="grid" id="grid"></div>
+  </section>
 
-        // Create 3D Geometric Mesh
-        const geometry = new THREE.IcosahedronGeometry(6, 2);
-        const wireMaterial = new THREE.MeshBasicMaterial({
-            color: 0xffffff,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.04
+  <!-- CONSENT TEXT -->
+  <div class="consent-text" id="consent-text">
+    By entering and using this site, you agree to our <button onclick="document.getElementById('modal-privacy').showModal()">Privacy Policy</button>. Please refer to our <button onclick="document.getElementById('modal-privacy').showModal()">Privacy Policy</button> for details.
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-copy">JUGEND TECHNOKRAT &copy; 2026</div>
+    <div class="footer-links">
+      <button onclick="document.getElementById('modal-privacy').showModal()" id="link-privacy">Privacy Policy</button>
+      <button onclick="document.getElementById('modal-terms').showModal()" id="link-terms">Terms of Use</button>
+    </div>
+  </footer>
+
+  <!-- PRIVACY MODAL -->
+  <dialog id="modal-privacy">
+    <div class="modal-inner">
+      <h2 class="modal-title" id="privacy-title">Privacy Policy</h2>
+      <div class="modal-body" id="privacy-body">JUGEND TECHNOKRAT respect your privacy. We do not collect or store any personal information, and we do not run newsletters or marketing list sign-ups. Any product purchases, payment processing, shipping, and customer support are processed offsite and managed entirely by Zazzle. We host only design layout assets.</div>
+      <button class="modal-close" onclick="document.getElementById('modal-privacy').close()" id="privacy-close">Close</button>
+    </div>
+  </dialog>
+
+  <!-- TERMS MODAL -->
+  <dialog id="modal-terms">
+    <div class="modal-inner">
+      <h2 class="modal-title" id="terms-title">Terms of Use</h2>
+      <div class="modal-body" id="terms-body">All visual products shown on JUGEND TECHNOKRAT represent automatically mapped design files on Zazzle templates. When you click to buy, you are redirected to Zazzle's custom editor. All sales transactions, customer refunds, and standard guarantees are processed under Zazzle's strict Terms of Service.</div>
+      <button class="modal-close" onclick="document.getElementById('modal-terms').close()" id="terms-close">Close</button>
+    </div>
+  </dialog>
+
+  <script>
+    /* ── TRANSLATIONS ── */
+    const TRANSLATIONS = {
+      en: {
+        buyBtn: 'Buy on Zazzle',
+        privacyTitle: 'Privacy Policy',
+        privacyBody: 'JUGEND TECHNOKRAT respect your privacy. We do not collect or store any personal information, and we do not run newsletters or marketing list sign-ups. Any product purchases, payment processing, shipping, and customer support are processed offsite and managed entirely by Zazzle. We host only design layout assets.',
+        termsTitle: 'Terms of Use',
+        termsBody: 'All visual products shown on JUGEND TECHNOKRAT represent automatically mapped design files on Zazzle templates. When you click to buy, you are redirected to Zazzle\'s custom editor. All sales transactions, customer refunds, and standard guarantees are processed under Zazzle\'s strict Terms of Service.',
+        closeBtn: 'Close',
+        privacyLink: 'Privacy Policy',
+        termsLink: 'Terms of Use',
+        consent: 'By entering and using this site, you agree to our <button onclick="document.getElementById(\'modal-privacy\').showModal()">Privacy Policy</button>. Please refer to our <button onclick="document.getElementById(\'modal-privacy\').showModal()">Privacy Policy</button> for details.',
+        items: 'items',
+      },
+      jp: {
+        buyBtn: 'Zazzleで購入する',
+        privacyTitle: '個人情報保護方針',
+        privacyBody: 'JUGEND TECHNOKRAT（以下「本サイト」）は、お客様のプライバシーを尊重します。本サイトでは個人情報の収集やメール配信等は一切行いません。商品のご購入、お支払い処理、発送、および顧客対応は、すべて外部パートナーであるZazzleのプラットフォーム上で行われます。本サイトはデザインアセットの表示のみを行います。',
+        termsTitle: '利用規約',
+        termsBody: '本サイトに掲載されている商品は、Zazzleのテンプレートへ自動配置されたイメージプレビューです。購入ボタンをクリックするとZazzleへ遷移します。すべての注文処理、配送、返品等はZazzleのサービス利用規約に基づいて適用されます。',
+        closeBtn: '閉じる',
+        privacyLink: 'プライバシーポリシー',
+        termsLink: '利用規約',
+        consent: 'お客様は、本サイトを利用することにより個人情報保護方針に同意したことになります。<button onclick="document.getElementById(\'modal-privacy\').showModal()">プライバシーポリシー</button>を参照してください。',
+        items: 'アイテム',
+      }
+    };
+
+    /* ── STATE ── */
+    let currentLang = 'en';
+    let currentFilter = 'all';
+
+    /* ── LANG ── */
+    function setLang(lang) {
+      currentLang = lang;
+      const t = TRANSLATIONS[lang];
+
+      // Header lang buttons
+      const btnEn = document.getElementById('btn-en');
+      const btnJp = document.getElementById('btn-jp');
+      if (btnEn) btnEn.classList.toggle('active', lang === 'en');
+      if (btnJp) btnJp.classList.toggle('active', lang === 'jp');
+
+      // Footer links
+      const privacyLink = document.getElementById('link-privacy');
+      const termsLink = document.getElementById('link-terms');
+      if (privacyLink) privacyLink.textContent = t.privacyLink;
+      if (termsLink) termsLink.textContent = t.termsLink;
+
+      // Consent text
+      const consentEl = document.getElementById('consent-text');
+      if (consentEl) consentEl.innerHTML = t.consent;
+
+      // Modal content
+      document.getElementById('privacy-title').textContent = t.privacyTitle;
+      document.getElementById('privacy-body').textContent = t.privacyBody;
+      document.getElementById('privacy-close').textContent = t.closeBtn;
+      document.getElementById('terms-title').textContent = t.termsTitle;
+      document.getElementById('terms-body').textContent = t.termsBody;
+      document.getElementById('terms-close').textContent = t.closeBtn;
+
+      renderCards();
+    }
+
+    /* ── FILTER ── */
+    function filter(cat) {
+      currentFilter = cat;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('onclick').includes(`'${cat}'`));
+      });
+      renderCards();
+    }
+
+    /* ── RENDER ── */
+    function renderCards() {
+      const grid = document.getElementById('grid');
+      const bar = document.getElementById('count-bar');
+      const lang = currentLang;
+      const t = TRANSLATIONS[lang];
+
+      let filtered = JUGEND_PRODUCTS.filter(p => {
+        if (currentFilter === 'all') return true;
+        // Prefix matches the filter character (e.g. "A01 POSTER" starts with "A")
+        const prefix = p.title_en.split(' ')[0]; // "A01", "PROTO", etc.
+        if (currentFilter === 'PROTO') return prefix === 'PROTO';
+        return prefix.startsWith(currentFilter);
+      });
+
+      // Interleave series so K01 blue isn't all shown first
+      const bySeriesMap = {};
+      filtered.forEach(p => {
+        const series = p.title_en.split(' ')[0];
+        if (!bySeriesMap[series]) bySeriesMap[series] = [];
+        bySeriesMap[series].push(p);
+      });
+      const seriesKeys = Object.keys(bySeriesMap).sort();
+      const interleaved = [];
+      let maxLen = Math.max(...seriesKeys.map(s => bySeriesMap[s].length));
+      for (let i = 0; i < maxLen; i++) {
+        seriesKeys.forEach(s => {
+          if (bySeriesMap[s][i]) interleaved.push(bySeriesMap[s][i]);
         });
-        const mesh = new THREE.Mesh(geometry, wireMaterial);
-        scene.add(mesh);
+      }
+      filtered = interleaved;
 
-        const pointsMaterial = new THREE.PointsMaterial({
-            color: 0xffffff,
-            size: 0.05,
-            transparent: true,
-            opacity: 0.2
-        });
-        const points = new THREE.Points(geometry, pointsMaterial);
-        scene.add(points);
+      bar.textContent = `${filtered.length} ${t.items}`;
 
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+      grid.innerHTML = filtered.map(p => {
+        const title = p[`title_${lang}`];
+        return `
+        <div class="card" onclick="window.open('${p.zazzle_url}','_blank')">
+          <div class="card-img-wrap">
+            <img
+              class="card-img"
+              src="${p.image_url}"
+              alt="${title}"
+              loading="lazy"
+              onload="this.classList.add('loaded')"
+              onerror="this.classList.add('loaded'); this.style.opacity='0.12';"
+            />
+          </div>
+          <div class="card-info">
+            <div class="card-title">${title}</div>
+            <div class="card-price">${p.price}</div>
+            <a class="card-buy" href="${p.zazzle_url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              ${t.buyBtn}
+            </a>
+          </div>
+        </div>`;
+      }).join('');
+    }
 
-        // Mouse Parallax
-        let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
-        window.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX / window.innerWidth) - 0.5;
-            mouseY = (e.clientY / window.innerHeight) - 0.5;
-        });
-
-        // Bind scroll to Three.js rotation and camera zoom
-        let scrollYOffset = 0;
-        window.addEventListener('scroll', () => {
-            scrollYOffset = window.scrollY;
-        });
-
-        const animate = () => {
-            targetX += (mouseX - targetX) * 0.05;
-            targetY += (mouseY - targetY) * 0.05;
-
-            // Scroll modifies rotation continuously
-            mesh.rotation.y = scrollYOffset * 0.0015 + targetX * 1.5;
-            mesh.rotation.x = scrollYOffset * 0.0008 + -targetY * 1.5;
-            points.rotation.y = scrollYOffset * 0.0015 + targetX * 1.5;
-            points.rotation.x = scrollYOffset * 0.0008 + -targetY * 1.5;
-
-            // Subtle camera zoom on scroll
-            camera.position.z = 15 + Math.min(scrollYOffset * 0.005, 5);
-
-            renderer.render(scene, camera);
-            requestAnimationFrame(animate);
-        };
-        animate();
-    </script>
-
-    <!-- UI State, Translations & Event Logic -->
-    <script>
-        gsap.registerPlugin(ScrollTrigger);
-        let currentLang = 'en';
-
-        const TRANSLATIONS = {
-            en: {
-                loading: "Loading JUGEND Collection...",
-                noDesigns: "No designs released yet.",
-                consent: `By entering and using this site, you agree to our <a href="javascript:void(0)" onclick="openModal('privacy')">Privacy Policy</a>. Please refer to our <a href="javascript:void(0)" onclick="openModal('privacy')">Privacy Policy</a> for details.`,
-                buyBtn: "Buy on Zazzle",
-                privacyTitle: "Privacy Policy",
-                privacyBody: `JUGEND TECHNOKRAT respect your privacy. We do not collect or store any personal information, and we do not run newsletters or marketing list sign-ups. Any product purchases, payment processing, shipping, and customer support are processed offsite and managed entirely by Zazzle JP. We host only design layout assets.`,
-                termsTitle: "Terms of Use",
-                termsBody: `All visual products shown on JUGEND TECHNOKRAT represent automatically mapped design files on Zazzle templates. When you click to buy, you are redirected to Zazzle's custom editor. All sales transactions, customer refunds, and standard guarantees are processed under Zazzle's strict Terms of Service.`
-            },
-            jp: {
-                loading: "コレクションを読み込み中...",
-                noDesigns: "まだデザインが公開されていません。",
-                consent: `お客様は、本サイトを利用することにより個人情報保護方針に同意したことになります。<a href="javascript:void(0)" onclick="openModal('privacy')">プライバシーポリシー</a>を参照してください。`,
-                buyBtn: "Zazzleで購入する",
-                privacyTitle: "個人情報保護方針",
-                privacyBody: `JUGEND TECHNOKRAT（以下「本サイト」）は、お客様のプライバシーを尊重します。本サイトでは個人情報の収集やメール配信等は一切行いません。商品のご購入、お支払い処理、発送、および顧客対応は、すべて外部パートナーであるZazzleのプラットフォーム上で行われます。本サイトはデザインアセットの表示のみを行います。`,
-                termsTitle: "利用規約",
-                termsBody: `本サイトに掲載されている商品は、Zazzleのテンプレートへ自動配置されたイメージプレビューです。購入ボタンをクリックするとZazzleへ遷移します。すべての注文処理、配送、返品等はZazzleのサービス利用規約に基づいて適用されます。`
-            }
-        };
-
-        function setLang(lang) {
-            currentLang = lang;
-            
-            // Toggle active classes
-            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
-            document.getElementById('lang-jp').classList.toggle('active', lang === 'jp');
-            
-            // Set static texts
-            document.getElementById('consent-text').innerHTML = TRANSLATIONS[lang].consent;
-            document.getElementById('modal-privacy-title').textContent = TRANSLATIONS[lang].privacyTitle;
-            document.getElementById('modal-privacy-body').innerHTML = TRANSLATIONS[lang].privacyBody;
-            document.getElementById('modal-terms-title').textContent = TRANSLATIONS[lang].termsTitle;
-            document.getElementById('modal-terms-body').innerHTML = TRANSLATIONS[lang].termsBody;
-
-            // Re-render showcase
-            renderShowcase();
-        }
-
-        function renderShowcase() {
-            const container = document.getElementById('product-showcase');
-            const products = (typeof JUGEND_PRODUCTS !== 'undefined') ? JUGEND_PRODUCTS : [];
-            
-            if (products.length === 0) {
-                container.innerHTML = `<div class="loading-msg">${TRANSLATIONS[currentLang].noDesigns}</div>`;
-                return;
-            }
-
-            container.innerHTML = '';
-            products.forEach((p, index) => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                card.id = `card-${index}`;
-                
-                const titleText = (currentLang === 'en') ? p.title_en : p.title_jp;
-
-                card.innerHTML = `
-                    <div class="image-wrapper" onclick="window.open('${p.zazzle_url}', '_blank')">
-                        <img src="${p.image_url}" alt="${titleText}" onerror="this.onerror=null; this.src='${p.design_url}';">
-                    </div>
-                    <div class="product-details">
-                        <h3 class="product-title">${titleText}</h3>
-                        <span class="product-price">${p.price || ''}</span>
-                        <a href="${p.zazzle_url}" target="_blank" class="shop-btn">
-                            ${TRANSLATIONS[currentLang].buyBtn}
-                            <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </a>
-                    </div>
-                `;
-                container.appendChild(card);
-
-                // Add 3D Tilt Effect on mousemove for each card
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-                    
-                    const tiltX = (y / (rect.height / 2)) * -8;
-                    const tiltY = (x / (rect.width / 2)) * 8;
-                    
-                    gsap.to(card, {
-                        rotateX: tiltX,
-                        rotateY: tiltY,
-                        duration: 0.3,
-                        ease: "power2.out"
-                    });
-                });
-
-                card.addEventListener('mouseleave', () => {
-                    gsap.to(card, {
-                        rotateX: 0,
-                        rotateY: 0,
-                        duration: 0.6,
-                        ease: "power2.out"
-                    });
-                });
-            });
-
-            // Smooth entrance animations for cards on scroll (GSAP simple reveal)
-            products.forEach((p, index) => {
-                gsap.to(`#card-${index}`, {
-                    opacity: 1,
-                    y: 0,
-                    duration: 1.2,
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: `#card-${index}`,
-                        start: "top bottom-=10%",
-                        toggleActions: "play none none none"
-                    }
-                });
-            });
-        }
-
-        // Modal triggers
-        function openModal(id) {
-            document.getElementById(`${id}-dialog`).showModal();
-        }
-
-        function closeModal(id) {
-            document.getElementById(`${id}-dialog`).close();
-        }
-
-        // Initial setup
-        window.addEventListener('DOMContentLoaded', () => {
-            gsap.from("#brand-title", {
-                opacity: 0,
-                y: 30,
-                duration: 1.2,
-                ease: "power4.out"
-            });
-            gsap.from("#site-subtitle", {
-                opacity: 0,
-                y: 20,
-                delay: 0.2,
-                duration: 1.0,
-                ease: "power2.out"
-            });
-            setLang('en');
-        });
-    </script>
+    /* ── INIT ── */
+    renderCards();
+  </script>
 </body>
 </html>

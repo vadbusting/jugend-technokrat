@@ -95,7 +95,7 @@ const JUGEND_PRODUCTS = [
 
   // B01 Series
   { id:"256006491638698903", title_en:"B01 POSTER", title_jp:"B01 ポスター", image_url:"https://rlv.zcache.com/svc/view?pid=256006491638698903&max_dim=600", zazzle_url:"https://www.zazzle.com/b01_poster-256006491638698903?rf=238192102477642780", price:"$77.70" },
-  { id:"256980977715652671", title_en:"B01 T-SHIRT", title_jp:"B01 Tシャツ", image_url:"https://rlv.zcache.com/svc/view?pid=256980977715652671&max_dim=600", zazzle_url:"https://www.zazzle.com/b01_t_shirt-256980977715652671?rf=238192102477642780", price:"$38.55" },
+  { id:"256851777719129648", title_en:"B01 T-SHIRT", title_jp:"B01 Tシャツ", image_url:"https://rlv.zcache.com/svc/view?pid=256851777719129648&max_dim=600", zazzle_url:"https://www.zazzle.com/b01_t_shirt-256851777719129648?rf=238192102477642780", price:"$38.55" },
   { id:"256250452138335052", title_en:"B01 NECK TIE", title_jp:"B01 ネクタイ", image_url:"https://rlv.zcache.com/svc/view?pid=256250452138335052&max_dim=600", zazzle_url:"https://www.zazzle.com/b01_neck_tie-256250452138335052?rf=238192102477642780", price:"$52.75" },
   { id:"256501883771220786", title_en:"B01 OUTDOOR PILLOW", title_jp:"B01 アウトドアクッション", image_url:"https://rlv.zcache.com/svc/view?pid=256501883771220786&max_dim=600", zazzle_url:"https://www.zazzle.com/b01_outdoor_pillow-256501883771220786?rf=238192102477642780", price:"$98.05" },
   { id:"256854418513623444", title_en:"B01 ROUND PILLOW", title_jp:"B01 ラウンドクッション", image_url:"https://rlv.zcache.com/svc/view?pid=256854418513623444&max_dim=600", zazzle_url:"https://www.zazzle.com/b01_round_pillow-256854418513623444?rf=238192102477642780", price:"$98.05" },
