@@ -93,6 +93,8 @@ def fetch_rss_products():
                 
                 zazzle_url = f"https://www.zazzle.com/{link.split('/')[-1].split('?')[0]}?rf={rf_id}"
                 image_url = f"https://rlv.zcache.com/svc/view?pid={p_id}&max_dim=1024"
+                if p_id == "256283109401962461":
+                    image_url = "https://rlv.zcache.com/k01_zippo_lighter-r4c213ed40c784dfe872d175b4f3f6cbc_6y4tf_1024.jpg?rlvnet=1"
                 
                 products.append({
                     "id": p_id,

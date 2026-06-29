@@ -19,7 +19,7 @@ window.products = [
     "id": "256283109401962461",
     "title_en": "K01 ZIPPO LIGHTER",
     "title_jp": "K01 ZIPPOライター",
-    "image_url": "https://rlv.zcache.com/k01_zippo_lighter-r4c213ed40c784dfe872d175b4f3f6cbc_6dx6d_1024.jpg?rlvnet=1",
+    "image_url": "https://rlv.zcache.com/k01_zippo_lighter-r4c213ed40c784dfe872d175b4f3f6cbc_6y4tf_1024.jpg?rlvnet=1",
     "zazzle_url": "https://www.zazzle.com/k01_zippo_lighter-256283109401962461?rf=238192102477642780",
     "price": "$94.55"
   },
