@@ -93,9 +93,6 @@ def fetch_rss_products():
                 if not price.startswith('$'):
                     price = f"${price}"
                 
-                # Format to self-promotion URL (WITHOUT rf tag to maximize royalty percentage to 35-50%)
-                # Zazzle Ambassador tracking handles login sessions automatically.
-                # However, for general Pinterest users, we include the associate ID parameter.
                 zazzle_url = f"https://www.zazzle.com/{link.split('/')[-1].split('?')[0]}?rf={rf_id}"
                 image_url = f"https://rlv.zcache.com/svc/view?pid={p_id}&max_dim=1024"
                 
@@ -110,38 +107,6 @@ def fetch_rss_products():
     except Exception as e:
         print("Error fetching RSS feed:", e)
     return products
-
-# Generator for SEO-friendly titles and descriptions (Pinterest SEO Hack)
-def generate_seo_meta(title_en, title_jp):
-    title_upper = title_en.upper()
-    
-    # 1. Determine product category and create localized rich title
-    if "T SHIRT" in title_upper or "T-SHIRT" in title_upper:
-        seo_title = f"{title_en} - テック系グラフィックTシャツ | JUGEND TECHNOKRAT"
-        seo_desc = f"【{title_jp}】ミニマリズムとテクノロジー、インダストリアルデザインを融合したグラフィックが特徴のデザイナーズTシャツ。モノトーンコーデやテックウェアとの相性も抜群です。ストリートやクリエイタースタイルに最適な一着。 #テックウェア #グラフィックT #モノトーンコーデ #Zazzle"
-    elif "ZIPPO" in title_upper:
-        seo_title = f"{title_en} - インダストリアルデザイン ジッポライター | JUGEND TECHNOKRAT"
-        seo_desc = f"【{title_jp}】無機質なタイポグラフィと洗練されたミニマルグラフィックを施したZippoライター。日常の持ち物にこだわりたい方へのギフト・プレゼントにも最適なコレクターズアイテムです。 #Zippo #ジッポ #インダストリアル #ミニマルデザイン #Zazzle"
-    elif "MUG" in title_upper or "CUP" in title_upper:
-        seo_title = f"{title_en} - デスク映えするミニマルデザインマグカップ | JUGEND TECHNOKRAT"
-        seo_desc = f"【{title_jp}】デスクワークやコーヒータイムをスタイリッシュに演出するマグカップ。無機質でモダンなミニマルデザインが特徴。自室のデスクセットアップやオフィスのデスク環境をクールに彩ります。 #デスクセットアップ #ミニマリスト #マグカップ #デザイナーズ雑貨 #Zazzle"
-    elif "MOUSE PAD" in title_upper or "DESK MAT" in title_upper:
-        seo_title = f"{title_en} - デスクセットアップに最適なマウスパッド | JUGEND TECHNOKRAT"
-        seo_desc = f"【{title_jp}】デスク環境をモダンにアップデートする高性能マウスパッド / デスクマット。無機質なミニマルグラフィックが、洗練されたガジェットスペースを演出します。クリエイターへのギフトにもおすすめ。 #デスクツアー #ガジェット #マウスパッド #ミニマリスト #Zazzle"
-    elif "WATCH" in title_upper:
-        seo_title = f"{title_en} - 近未来テイストのミニマルデザイン腕時計 | JUGEND TECHNOKRAT"
-        seo_desc = f"【{title_jp}】無機質で研ぎ澄まされたグラフィックが特徴の腕時計。近未来的なテック感とインダストリアルなエッセンスを融合。手元をスマートに飾るスタイリッシュなアクセサリーです。 #腕時計 #プロダクトデザイン #ミニマルファッション #テック系 #Zazzle"
-    elif "POSTER" in title_upper:
-        seo_title = f"{title_en} - 部屋を格上げするミニマルアートポスター | JUGEND TECHNOKRAT"
-        seo_desc = f"【{title_jp}】空間にモダンで知的なアクセントを加える、ミニマル・インダストリアルデザインのアートポスター。書斎、オフィス、リビングなど、クリエイティブなインテリア装飾に最適です。 #インテリアアート #ポスターデザイン #インダストリアルデザイン #書斎インテリア #Zazzle"
-    elif "CASE" in title_upper:
-        seo_title = f"{title_en} - スマートなミニマルiPhoneケース | JUGEND TECHNOKRAT"
-        seo_desc = f"【{title_jp}】インダストリアルなグラフィックを施した耐衝撃デザイナーズiPhoneケース。無機質でスタイリッシュな見た目が、あなたのスマートフォンをモダンにガードします。 #iPhoneケース #ガジェット #スマホケース #ミニマリズム #Zazzle"
-    else:
-        seo_title = f"{title_en} - インダストリアルミニマルデザイン雑貨 | JUGEND TECHNOKRAT"
-        seo_desc = f"【{title_jp}】ミニマリズムとテクノロジー、タイポグラフィを融合したJUGEND TECHNOKRATのプロダクト。実用性と高いデザイン性を兼ね備え、デスク環境やライフスタイルをモダンに演出します。 #ミニマリスト #デザイナーズ雑貨 #プロダクトデザイン #モノトーン #Zazzle"
-
-    return seo_title, seo_desc
 
 def main():
     # 1. Load current products
@@ -162,7 +127,7 @@ def main():
 
     # 3. Incremental Merge (add new products to top)
     new_added = 0
-    for p in reversed(rss_prods):  # reverse so oldest RSS items get processed first
+    for p in reversed(rss_prods):
         p_id = p['id']
         if p_id not in current_ids:
             current_products.insert(0, p)
@@ -170,15 +135,13 @@ def main():
             new_added += 1
             print(f"New product detected: {p['title_en']} ({p_id}) at {p['price']}")
 
-    # Save update if new products found, or recreate CSVs anyway to apply SEO upgrades
-    # 4. Save products.js if updated
     if new_added > 0:
         print(f"Added {new_added} new products. Total lineup: {len(current_products)}")
         js_output = "window.products = " + json.dumps(current_products, indent=2, ensure_ascii=False) + ";\n"
         with open(products_js_path, 'w', encoding='utf-8') as f:
             f.write(js_output)
 
-    # 5. Always rewrite CSVs to apply SEO optimizations to both old and new products
+    # 4. Write CSVs with clean, simple titles and descriptions
     csv_fields = ["id", "title", "description", "link", "image_link", "price", "availability", "condition"]
     def write_catalog_csv(path):
         with open(path, 'w', encoding='utf-8', newline='') as f:
@@ -186,12 +149,10 @@ def main():
             writer.writeheader()
             for p in current_products:
                 raw_price = p['price'].replace('$', '').strip()
-                # Generate rich title and description
-                seo_title, seo_desc = generate_seo_meta(p['title_en'], p['title_jp'])
                 writer.writerow({
                     "id": p['id'],
-                    "title": seo_title,
-                    "description": seo_desc,
+                    "title": p['title_en'],
+                    "description": p['title_jp'],
                     "link": p['zazzle_url'],
                     "image_link": p['image_url'],
                     "price": raw_price,
@@ -201,7 +162,7 @@ def main():
     
     write_catalog_csv(catalog_csv_path)
     write_catalog_csv(pinterest_csv_path)
-    print("Successfully updated database and SEO-optimized CSV catalogs.")
+    print("Successfully updated database and CSV catalogs with clean metadata.")
 
 if __name__ == "__main__":
     main()
