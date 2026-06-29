@@ -15,6 +15,8 @@ rf_id = "238192102477642780"
 # RSS Feed URL
 rss_url = "https://feed.zazzle.com/store/jugendtechnokrat/rss"
 
+brand_description = "Hände noch jung, Köpfe noch unverdorben. Jugend lenkt die Welt und brings die Adoleszenz auf den Plan."
+
 JP_TRANSLATIONS = {
     "ZIPPO LIGHTER": "ZIPPOライター", "ZIPPO LIGHTERS": "ZIPPOライター",
     "BEACH TOWEL": "ビーチタオル", "DESK MAT": "デスクマット", "MOUSE PAD": "マウスパッド",
@@ -68,21 +70,17 @@ def fetch_rss_products():
     try:
         with urllib.request.urlopen(req) as response:
             xml_data = response.read().decode('utf-8')
-            # Clean namespace prefix to prevent parsing issues
             xml_data = clean_xml_namespaces(xml_data)
             root = ET.fromstring(xml_data)
             
             for item in root.findall('.//item'):
                 link = item.find('link').text
-                # Extract product ID (18 digits)
                 id_match = re.search(r'-(\d{18})(?:\?|$)', link)
                 if not id_match:
                     continue
                 p_id = id_match[1]
                 
-                # Zazzle details
                 title_en = item.find('title').text.strip()
-                # If Zazzle auto-renamed it (without Series prefix), try to restore from URL slug
                 if not re.match(r'^[A-Z]\d{2}', title_en) and "PROTO" not in title_en:
                     url_slug = link.split('/')[-1]
                     slug_match = re.match(r'^([a-zA-Z0-9_]+)-\d+$', url_slug)
@@ -125,7 +123,7 @@ def main():
     rss_prods = fetch_rss_products()
     print(f"Fetched {len(rss_prods)} products from Zazzle RSS")
 
-    # 3. Incremental Merge (add new products to top)
+    # 3. Incremental Merge
     new_added = 0
     for p in reversed(rss_prods):
         p_id = p['id']
@@ -133,15 +131,15 @@ def main():
             current_products.insert(0, p)
             current_ids.add(p_id)
             new_added += 1
-            print(f"New product detected: {p['title_en']} ({p_id}) at {p['price']}")
+            print(f"New product detected: {p['title_en']} ({p_id})")
 
     if new_added > 0:
-        print(f"Added {new_added} new products. Total lineup: {len(current_products)}")
+        print(f"Added {new_added} new products.")
         js_output = "window.products = " + json.dumps(current_products, indent=2, ensure_ascii=False) + ";\n"
         with open(products_js_path, 'w', encoding='utf-8') as f:
             f.write(js_output)
 
-    # 4. Write CSVs with clean, simple titles and descriptions
+    # 4. Write CSVs with brand slogan as description
     csv_fields = ["id", "title", "description", "link", "image_link", "price", "availability", "condition"]
     def write_catalog_csv(path):
         with open(path, 'w', encoding='utf-8', newline='') as f:
@@ -152,7 +150,7 @@ def main():
                 writer.writerow({
                     "id": p['id'],
                     "title": p['title_en'],
-                    "description": p['title_jp'],
+                    "description": brand_description,
                     "link": p['zazzle_url'],
                     "image_link": p['image_url'],
                     "price": raw_price,
@@ -162,7 +160,7 @@ def main():
     
     write_catalog_csv(catalog_csv_path)
     write_catalog_csv(pinterest_csv_path)
-    print("Successfully updated database and CSV catalogs with clean metadata.")
+    print("Successfully updated database and CSV catalogs with brand description.")
 
 if __name__ == "__main__":
     main()
