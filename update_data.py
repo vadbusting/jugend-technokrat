@@ -94,7 +94,7 @@ def fetch_rss_products():
                     price = f"${price}"
                 
                 # Format to affiliate link
-                zazzle_url = f"https://www.zazzle.com/{link.split('/')[-1].split('?')[0]}?rf={rf_id}"
+                zazzle_url = f"https://www.zazzle.com/{link.split('/')[-1].split('?')[0]}"
                 image_url = f"https://rlv.zcache.com/svc/view?pid={p_id}&max_dim=1024"
                 
                 products.append({
