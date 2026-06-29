@@ -217,18 +217,18 @@ window.products = [
   },
   {
     "id": "256386992126855903",
-    "title_en": "K01 IPHONE 16 PRO CASE",
+    "title_en": "K01 iPHONE 16 PRO CASE",
     "title_jp": "K01 iPhone 16 Proケース",
     "image_url": "https://rlv.zcache.com/svc/view?pid=256386992126855903&max_dim=1024",
-    "zazzle_url": "https://www.zazzle.com/k01_case_mate_iphone_case-256386992126855903?rf=238192102477642780",
+    "zazzle_url": "https://www.zazzle.com/k01_iphone_16_pro_case-256386992126855903?rf=238192102477642780",
     "price": "$66.45"
   },
   {
     "id": "256729212773694692",
-    "title_en": "K01 IPHONE 16 CASE",
+    "title_en": "K01 iPHONE 16 CASE",
     "title_jp": "K01 iPhone 16ケース",
     "image_url": "https://rlv.zcache.com/svc/view?pid=256729212773694692&max_dim=1024",
-    "zazzle_url": "https://www.zazzle.com/k01_case_mate_iphone_case-256729212773694692?rf=238192102477642780",
+    "zazzle_url": "https://www.zazzle.com/k01_iphone_16_case-256729212773694692?rf=238192102477642780",
     "price": "$66.45"
   },
   {
@@ -489,10 +489,10 @@ window.products = [
   },
   {
     "id": "256185664746300445",
-    "title_en": "F01 POSTER",
-    "title_jp": "F01 ポスター",
+    "title_en": "E01 POSTER",
+    "title_jp": "E01 ポスター",
     "image_url": "https://rlv.zcache.com/svc/view?pid=256185664746300445&max_dim=1024",
-    "zazzle_url": "https://www.zazzle.com/f01_poster-256185664746300445?rf=238192102477642780",
+    "zazzle_url": "https://www.zazzle.com/e01_poster-256185664746300445?rf=238192102477642780",
     "price": "$77.70"
   },
   {
@@ -609,10 +609,10 @@ window.products = [
   },
   {
     "id": "256857124364878260",
-    "title_en": "H01 IPHONE 16 PRO MAX CASE",
+    "title_en": "H01 iPHONE 16 PRO MAX CASE",
     "title_jp": "H01 iPhone 16 Pro Maxケース",
     "image_url": "https://rlv.zcache.com/svc/view?pid=256857124364878260&max_dim=1024",
-    "zazzle_url": "https://www.zazzle.com/h01_case_mate_iphone_case-256857124364878260?rf=238192102477642780",
+    "zazzle_url": "https://www.zazzle.com/h01_iphone_16_pro_max_case-256857124364878260?rf=238192102477642780",
     "price": "$66.45"
   },
   {
@@ -977,10 +977,10 @@ window.products = [
   },
   {
     "id": "256511981053105684",
-    "title_en": "K01 T SHIRT",
-    "title_jp": "K01 Tシャツ",
+    "title_en": "M01 T SHIRT",
+    "title_jp": "M01 Tシャツ",
     "image_url": "https://rlv.zcache.com/svc/view?pid=256511981053105684&max_dim=1024",
-    "zazzle_url": "https://www.zazzle.com/k01_t_shirt-256511981053105684?rf=238192102477642780",
+    "zazzle_url": "https://www.zazzle.com/m01_t_shirt-256511981053105684?rf=238192102477642780",
     "price": "$48.05"
   },
   {
